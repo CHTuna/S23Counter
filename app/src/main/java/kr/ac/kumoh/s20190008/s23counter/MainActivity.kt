@@ -5,9 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -16,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +33,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                Clicker()
+                Column {
+                    Clicker()
+                    Counter()
+                    Counter()
+                }
             }
         }
     }
@@ -52,7 +60,7 @@ fun MyApp(content: @Composable () -> Unit){
 fun Clicker() {
     var (txtString, setTxtString) = remember { mutableStateOf("눌러주세요") }
     Column(modifier = Modifier
-        .fillMaxSize()
+        .fillMaxWidth()
         .padding(8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
@@ -66,6 +74,37 @@ fun Clicker() {
             }) {
             // Text(text = "눌러봐")
             Text("눌러봐")
+        }
+    }
+}
+
+@Composable
+fun Counter() {
+    var (count, setcount) = rememberSaveable { mutableStateOf(0) }
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(8.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(text = "$count",
+            fontSize = 70.sp,
+        )
+        Row {
+            Button(modifier = Modifier.weight(1f),
+                onClick = {
+                    setcount(count + 1)
+                }) {
+                // Text(text = "증가")
+                Text("증가")
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(modifier = Modifier.weight(1f),
+                onClick = {
+                    setcount(count - 1)
+                }) {
+                // Text(text = "감소")
+                Text("감소")
+            }
         }
     }
 }
